@@ -11,7 +11,7 @@
   --green: #39ff88;
   --green-light: #14271b;
   --mint: #14271b;
-  --coral: #39ff88;
+  --coral: #ff8c8c;
   --accent: #39ff88;
   --blue: #39ff88;
   --blue-light: #14271b;
@@ -835,8 +835,12 @@ input::placeholder, textarea::placeholder {
   color: #8cffb8;
 }
 
-.money-income, .money-expense {
+.money-income {
   color: #39ff88;
+}
+
+.money-expense {
+  color: #ff8c8c;
 }
 
 .row-actions button, .decision-actions button {
