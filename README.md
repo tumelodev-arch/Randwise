@@ -4,7 +4,9 @@ A local-first monthly cash-flow planner for recording income and expenses in Sou
 
 ## Demo
 
-**Hosted status:** not deployed yet. Enable GitHub Pages under **Settings → Pages → Build and deployment → Source = GitHub Actions**. After a successful deployment, the app should be available at [https://tumelodev-arch.github.io/Randwise/](https://tumelodev-arch.github.io/Randwise/).
+**Live demo:** [Open Randwise](https://tumelodev-arch.github.io/Randwise/)
+
+The GitHub Pages deployment workflow has reported success. The demo is a static browser app; records remain in the current browser and are not sent to a backend. A successful deployment is not a substitute for manual browser and accessibility checks.
 
 **Run locally:** open `index.html` in a modern browser. The app has no build step or external runtime dependency.
 
