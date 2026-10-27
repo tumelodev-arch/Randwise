@@ -152,8 +152,17 @@
     }
   }
   function validTransaction(item) {
-    return item && typeof item.id === "string" && ["income",
-    "expense"].includes(item.type) && typeof item.description === "string" && item.description.trim() && categories.includes(item.category) && Number.isFinite(Number(item.amount)) && Number(item.amount)>0 && /^\d{4}-\d{2}-\d{2}$/.test(item.date);
+    return Boolean(
+      item &&
+      typeof item.id === "string" &&
+      ["income", "expense"].includes(item.type) &&
+      typeof item.description === "string" &&
+      item.description.trim() &&
+      categories.includes(item.category) &&
+      Number.isFinite(Number(item.amount)) &&
+      Number(item.amount) > 0 &&
+      /^\d{4}-\d{2}-\d{2}$/.test(item.date)
+    );
   }
   function load() {
     try {
@@ -200,20 +209,70 @@
     $("#metric-rate").textContent = income>0?Math.round(net/income*100)+"%": "—";
   }
   function renderRows(rows) {
-    $("#visible-count").textContent = rows.length+" entr"+(rows.length === 1?"y": "ies");
+    $("#visible-count").textContent =
+      `${rows.length} entr${rows.length === 1 ? "y" : "ies"}`;
     $("#empty-state").hidden = rows.length !== 0;
-    $("#transaction-rows").innerHTML = rows.map(t => '<tr><td><div class="transaction-name" title="'+escapeHtml(t.description)+'">'+escapeHtml(t.description)+'</div><div class="transaction-category">'+escapeHtml(t.category)+(t.note?' · '+escapeHtml(t.note): '')+'</div></td><td>'+escapeHtml(t.date)+'</td><td><span class="type-chip '+t.type+'">'+t.type+'</span></td><td class="numeric '+(t.type === "income"?"money-income": "money-expense")+'">'+(t.type === "income"?"+": "−")+money.format(Number(t.amount))+'</td><td><div class="row-actions"><button type="button" data-edit="'+escapeHtml(t.id)+'">Edit</button><button type="button" data-delete="'+escapeHtml(t.id)+'" aria-label="Delete '+escapeHtml(t.description)+'">Delete</button></div></td></tr>').join("");
+    $("#transaction-rows").innerHTML = rows
+      .map((t) => {
+        const description = escapeHtml(t.description);
+        const category = escapeHtml(t.category);
+        const note = t.note ? ` · ${escapeHtml(t.note)}` : "";
+        const type = escapeHtml(t.type);
+        const typeClass = t.type === "income" ? "money-income" : "money-expense";
+        const sign = t.type === "income" ? "+" : "−";
+        const amount = money.format(Number(t.amount));
+
+        return `
+          <tr>
+            <td>
+              <div class="transaction-name" title="${description}">${description}</div>
+              <div class="transaction-category">${category}${note}</div>
+            </td>
+            <td>${escapeHtml(t.date)}</td>
+            <td><span class="type-chip ${type}">${type}</span></td>
+            <td class="numeric ${typeClass}">${sign}${amount}</td>
+            <td>
+              <div class="row-actions">
+                <button type="button" data-edit="${escapeHtml(t.id)}">Edit</button>
+                <button type="button" data-delete="${escapeHtml(t.id)}" aria-label="Delete ${description}">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `.trim();
+      })
+      .join("");
   }
+
   function renderBreakdown() {
-    const monthRows = transactions.filter(t => t.type === "expense" && (!monthInput.value || monthKey(t.date) === monthInput.value));
+    const monthRows = transactions.filter(
+      (t) => t.type === "expense" && (!monthInput.value || monthKey(t.date) === monthInput.value)
+    );
     const totals = new Map();
-    monthRows.forEach(t => totals.set(t.category,
-    (totals.get(t.category) || 0)+Number(t.amount)));
-    const sorted = [...totals.entries()].sort((a,
-    b) => b[1]-a[1]);
+    monthRows.forEach((t) => {
+      totals.set(t.category, (totals.get(t.category) || 0) + Number(t.amount));
+    });
+
+    const sorted = [...totals.entries()].sort((a, b) => b[1] - a[1]);
     const max = sorted[0]?.[1] || 1;
-    $("#category-breakdown").innerHTML = sorted.length?sorted.map(([name,
-    total]) => '<div class="breakdown-row"><span class="breakdown-label">'+escapeHtml(name)+'</span><div class="bar-track" role="img" aria-label="'+escapeHtml(name)+': '+money.format(total)+'"><div class="bar-fill" style="width:'+Math.round(total/max*100)+'%"></div></div><span class="breakdown-amount">'+money.format(total)+'</span></div>').join(""): '<p class="empty-state">No expense entries for this month yet.</p>';
+
+    $("#category-breakdown").innerHTML = sorted.length
+      ? sorted
+          .map(([name, total]) => {
+            const label = escapeHtml(name);
+            const amount = money.format(total);
+            const width = Math.round((total / max) * 100);
+            return `
+              <div class="breakdown-row">
+                <span class="breakdown-label">${label}</span>
+                <div class="bar-track" role="img" aria-label="${label}: ${amount}">
+                  <div class="bar-fill" style="width:${width}%"></div>
+                </div>
+                <span class="breakdown-amount">${amount}</span>
+              </div>
+            `.trim();
+          })
+          .join("")
+      : '<p class="empty-state">No expense entries for this month yet.</p>';
   }
   function render() {
     const rows = visibleTransactions();

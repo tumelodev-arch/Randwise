@@ -3,6 +3,9 @@ const { test, expect } = require("@playwright/test");
 test("Randwise creates, edits, persists and exports a transaction", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /Give every rand a clear place/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Export filtered CSV/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Replace with sample data/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Clear all data/ })).toBeVisible();
   await expect(page.locator("#transaction-rows tr").first()).toBeVisible();
 
   const description = page.locator('#transaction-form input[name="description"]');
