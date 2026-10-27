@@ -1,31 +1,39 @@
 # Randwise
 
-A local-first monthly cash-flow planner for recording income and expenses in South African rand.
+A local-first cash-flow planner for recording income and expenses, reviewing monthly totals and category breakdowns, and exporting filtered transactions as CSV.
 
-## Demo
+**Live demo:** https://tumelodev-arch.github.io/Randwise/
 
-**Hosted status:** not deployed yet. Enable GitHub Pages under **Settings → Pages → Build and deployment → Source = GitHub Actions**. After a successful deployment, the app should be available at [https://tumelodev-arch.github.io/Randwise/](https://tumelodev-arch.github.io/Randwise/).
+## What it does
 
-**Run locally:** open `index.html` in a modern browser. The app has no build step or external runtime dependency.
-
-## Features
-
-- Add, edit and delete income/expense entries.
-- Filter by month, type, category and search terms.
-- Calculate monthly income, expenses, net cash flow and savings rate.
-- Compare spending by category.
-- Export the visible filtered transactions to CSV.
-- Persist entries in the current browser using local storage.
-- Restore synthetic starter data for demonstration.
+- Create, edit and delete income/expense entries.
+- Filter by month, type, category and search term.
+- Review income, expenses, net cash flow, savings rate and spending by category.
+- Export filtered transactions to CSV.
+- Persist records in the current browser using local storage.
 
 ## Run locally
 
-Open `index.html` in a modern browser. There is no build step or external runtime dependency. `styles.css` and `app.js` are loaded locally.
+Open `index.html` in a modern browser. The application uses local HTML, CSS and JavaScript and has no build step or external runtime dependency.
 
 ## Data and privacy
 
-Records are stored in this browser only; they are not sent to a server or shared across browsers. Use synthetic or non-sensitive information. Clearing browser storage can remove locally saved records.
+Records stay in the current browser until exported or cleared. They are not sent to a server or shared across browsers. This is a budgeting utility, not financial advice or a bank-connected product. It has no account system, backend, cloud sync or bank integration. Do not enter bank credentials or other sensitive information.
 
-## Boundaries
+## Tests
 
-This is a budgeting utility, not financial advice or a bank-connected product. It has no account system, cloud sync, bank integration or encryption beyond the browser's own storage facilities. Never enter bank credentials, account numbers or information you would not want saved in this browser.
+The repository includes Playwright end-to-end tests. Install dependencies and Chromium before running them.
+
+```bash
+npm install
+npx playwright install chromium
+npm run test:e2e
+```
+
+## Interface design
+
+The interface uses the shared Engineering Field Notes design language, adapted for this app's main task. Primary controls have labelled actions, the mobile layout keeps actions reachable, and keyboard focus is visible. The app uses its own accent colour to make it recognisable beside the portfolio.
+
+## Limitations
+
+This is a browser-based practice application. A successful static deployment does not establish that it has a backend, authentication, shared state or production monitoring.
