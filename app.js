@@ -152,8 +152,17 @@
     }
   }
   function validTransaction(item) {
-    return item && typeof item.id === "string" && ["income",
-    "expense"].includes(item.type) && typeof item.description === "string" && item.description.trim() && categories.includes(item.category) && Number.isFinite(Number(item.amount)) && Number(item.amount)>0 && /^\d{4}-\d{2}-\d{2}$/.test(item.date);
+    return Boolean(
+      item &&
+      typeof item.id === "string" &&
+      ["income", "expense"].includes(item.type) &&
+      typeof item.description === "string" &&
+      item.description.trim() &&
+      categories.includes(item.category) &&
+      Number.isFinite(Number(item.amount)) &&
+      Number(item.amount) > 0 &&
+      /^\d{4}-\d{2}-\d{2}$/.test(item.date)
+    );
   }
   function load() {
     try {
